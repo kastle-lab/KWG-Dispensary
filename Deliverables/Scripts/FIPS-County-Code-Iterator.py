@@ -61,20 +61,18 @@ def transferFips(countyFipsDf, rosterDf):
 
 # Main
 ## File inputs
-rosterDf = pd.read_csv("Deliverables/Data/06-18-2024_Ohio_Medical_Marijuana_Dispensary_Roster_COOs.csv")
-countyFipsDf = pd.read_csv("Deliverables/Data/ohio-county-fips2.csv")
-countyDataDf = pd.read_csv("Deliverables/Data/Ohio_County_Data.csv")
+rosterDf = pd.read_csv("./Deliverables/Data/06-18-2024_Ohio_Medical_Marijuana_Dispensary_Roster_COOs.csv")
+countyFipsDf = pd.read_csv("./Deliverables/Data/ohio-county-fips.csv")
+countyDataDf = pd.read_csv("./Deliverables/Data/Ohio_County_Data.csv")
 
 ## Create Lists
-countyList = list(countyFipsDf["County"])
-fipsList = list(countyFipsDf["FIPS"])
+countyList = list(countyFipsDf["label"])
+fipsList = list(countyFipsDf["fips"])
 counties = rosterDf['Public Address - County']
 countiesList = counties.tolist()
 
-## Perform function for counting the number of dispensaries in a county
-# numDispInCounty(countyList,countiesList)  # count the number of dispensaries in ea county
+#numDispInCounty(countyList,countiesList)  # count the number of dispensaries in ea county
 
-## Perform Function for adding FIPS codes from countyFIPS to roster file.
 # transferFips(countyFipsDf, rosterDf)
 
 # print(rosterDf.loc[:,"Public Address - County"])
