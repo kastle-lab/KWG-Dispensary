@@ -4,60 +4,49 @@
 import os
 import csv
 import pandas as pd
+import numpy as np
 
 # Functions
 ## This function is used to test the dataframes used throughout this program
 def test (dataFrame):
     print("BEGIN TEST\n", dataFrame)
     print("\n",dataFrame.dtypes)
-    print("\n",dataFrame.head(), "\nEND TEST\n")
+    print("\nEND TEST\n")
 
-## This function creates a dataframe used to store the number of dispensaries that exist in each county of Ohio
-def numDispInCounty(list1, list2):
+# This function will save a data frame to the desired directory with the desired filename.
+def saveDataFrame(df, dir, fName):
     # Declare pathing and filename
-    outDir = "./Deliverables/Data"
-    newFileName = "ohio-county-dispensary-qty"
+    outDir = dir
+    newFileName = fName
     output_file = os.path.join(outDir, newFileName)
 
-    # Sort data (A-Z)
-    list1.sort()
-    list2.sort()
-
-    # Fill Dictionary / key(county):value(count)
-    countyDictionary = {}
-    inc = 0
-    for i in list1:
-        countyName=list1[inc]
-        countyDictionary.update({countyName:0})
-        inc = inc + 1
-
-    # Count counties and fill values in dictionary
-    for key in countyDictionary.keys():
-        inc = 0
-        countyCount = 0
-        for i in list2:
-            countyName=list2[inc]
-            if (countyName == key):
-                countyCount = countyCount + 1
-                countyDictionary.update({key:countyCount})
-            inc = inc + 1
-
-    # Create dataframe from data
-    countyDf = pd.DataFrame(countyDictionary.items(), columns=['County Name', 'Dispensary Count'])
-    print(countyDf)
+    # Save file as csv
     print("Saving...")
-    countyDf.to_csv(output_file, index=False)
+    df.to_csv(output_file, index=False)
     print("File saved as ", newFileName)
+    print(df)
 
-def transferFips(countyFipsDf, rosterDf):
+# This function will find matches between two data frames (df), compare items in the specified columns for each df, and fill them into df2 that is returned.
+def matchInsert(df1, df2, mapColName1, mapColName2, colNameMatch, newColName):
     # Copy data frames
-    fipsCopy = countyFipsDf.copy()
-    rosCopy = rosterDf.copy()
+    df1Copy = df1.copy()
+    df2Copy = df2.copy()
 
-    # Insert new column labeled FIPS in the copy of the roster data frame
-    rosCopy["FIPS"] = 0
-    
-    # Iterate through both data frames and find matches for counties and insert FIPS code into the copy of the roster data frame
+    # Create new column in df2
+    df2Copy[newColName] = 0
+
+    # Create a mapping from mapColName1 to mapColName2
+    fipsMap = dict(zip(df1Copy[mapColName1], df1Copy[mapColName2]))
+
+    # Map the newColName values based on colNameMatch using the map
+    df2Copy[newColName] = df2Copy[colNameMatch].map(fipsMap)
+
+    # If data type is numeric, replace NaN's with 0 and convert values to integer (removes decimals)
+    if pd.api.types.is_numeric_dtype(df2Copy[newColName]):
+        df2Copy[newColName] = df2Copy[newColName].fillna(0).astype(int)
+
+    print(df2Copy)
+    return df2Copy
 
 # Main
 ## File inputs
@@ -65,18 +54,15 @@ rosterDf = pd.read_csv("./Deliverables/Data/06-18-2024_Ohio_Medical_Marijuana_Di
 countyFipsDf = pd.read_csv("./Deliverables/Data/ohio-county-fips.csv")
 countyDataDf = pd.read_csv("./Deliverables/Data/Ohio_County_Data.csv")
 
-## Create Lists
-countyList = list(countyFipsDf["label"])
-fipsList = list(countyFipsDf["fips"])
-counties = rosterDf['Public Address - County']
-countiesList = counties.tolist()
+# count the number of dispensaries in ea county and save
+dispensaryCountyQtySeries = rosterDf['Public Address - County'].value_counts()
+dispensaryCountyQtyDf = dispensaryCountyQtySeries.reset_index()
+dispensaryCountyQtyDf.columns = ['County', 'Count']
+saveDataFrame(dispensaryCountyQtyDf, "./Deliverables/Data","ohio-county-dispensary-qty")
 
-#numDispInCounty(countyList,countiesList)  # count the number of dispensaries in ea county
-
-# transferFips(countyFipsDf, rosterDf)
-
-# print(rosterDf.loc[:,"Public Address - County"])
-# print(countyDataDf.co_fip)
+# match fips code with county in rosterDf
+newRosDf = matchInsert(countyFipsDf, rosterDf, "label", "fips", "Public Address - County", "Fips")
+saveDataFrame(newRosDf,"./Deliverables/Data","Roster-fips.csv")
 
 ## File Checks
 # test(rosterDf)
