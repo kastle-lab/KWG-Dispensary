@@ -6,6 +6,12 @@ The Ohio-KWG is designed to represent Ohio at various levels of abstraction and 
 
 # Competency Questions
 
+# References
+
+### Ontologies
+
+- [Financial Industry Business Ontology (FIBO)](https://github.com/edmcouncil/fibo)
+
 # Contributors
 
 - Michael McCain
