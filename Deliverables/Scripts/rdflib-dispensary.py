@@ -48,7 +48,6 @@ issue_date = pfs["kl-ont"]["hasIssueDate"]
 effective_date = pfs["kl-ont"]["hasEffectiveDate"]
 expiration_date = pfs["kl-ont"]["hasExpirationDate"]
 
-
 ## not in csv
 ### xsd:string
 dispensary_name = pfs["kl-ont"]["hasName"]
