@@ -1,2 +1,2 @@
 # Dispensary Location
-This repository contains the concrete deliverables for the Dispensary Location research done by Hannah, Lee.
+This repository contains the concrete deliverables for the Ohio KnowWhereGraph Dispensary Location research done by Lee Hannah, Michael McCain, and Cogan Shimizu.
