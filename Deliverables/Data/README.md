@@ -20,3 +20,4 @@ This directory contains data about Ohio at the Zip Code Tabulated Areas (ZCTA) l
 - Household Income
 - Demographics
 - Housing Costs
+- Health Insurance Coverage
