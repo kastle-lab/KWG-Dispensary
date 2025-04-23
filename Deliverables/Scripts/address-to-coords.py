@@ -5,10 +5,11 @@ import os
 from dotenv import find_dotenv, load_dotenv
 import pandas as pd
 import googlemaps
+import requests
+import time
 
 # Functions 
-
-# This function will attempt to find a file within a specified directory and subdirectories. Then it will return the absolute path of that file.
+## This function will attempt to find a file within a specified directory and subdirectories. Then it will return the absolute path of that file.
 def Find_File(fileName, desiredDirectory):
   try:
     for root, dirs, files in os.walk(desiredDirectory): # Search for file
@@ -24,25 +25,55 @@ def Find_File(fileName, desiredDirectory):
     print(f"\nError: An unknown error occured: {e}")
 
 # MAIN
-
 ## Variables
-start_dir = "C:\\Users\\micha\\Documents"     # Directory 
+startDir = "C:\\Users\\micha\\Documents"     # Directory for search
+outDir = startDir + "\\GitHub\\Dispensary\\Deliverables\\Data\\"
+outFile = "Dispensary_Roster_Geo.csv"
+outPath = outDir + outFile # File Output for updated dataframe
+# print(outPath)
 fileName = "06-18-2024_Ohio_Medical_Marijuana_Dispensary_Roster_COOs.csv"
-filePath = Find_File(fileName, start_dir) # Joined file path
+filePath = Find_File(fileName, startDir) # Joined file path
 # print(f"File path: {filePath}") 
 
-env_path = find_dotenv() # Path to .env file
+env_path = find_dotenv() # Path to .env file (in root)
 load_dotenv(env_path) # Load env variables
 GOOGLE_API_KEY = os.environ['GEO_API_KEY'] # API_KEY
 
 state = "OH"
+apiUrl = "https://maps.googleapis.com/maps/api/geocode/json" # Gmaps Geocoding API URL
 
-# Read in csv
+## Read in csv
 df =  pd.read_csv(filePath)
 
-# get address from columns and make into a variable (public address street, public address city, State, public zip)
+## Concatonate separate address columns and make a full address col (public address street, public address city, State, public zip)
 df["Full Address"] = df['Public Address Street'] + ' ' + df['Public Address City'] + ', ' + state + ' ' + df['Public Zip']
-
-# get geloc data
 print(df)
-# append geloc data
+
+## Create new df column for geoloc data
+df["Geo"] = None
+
+## get geloc data
+### Loop through each address and request geo location data from google api (json format)
+for idx, row in df.iterrows():
+    address = row['Full Address']
+    params = {
+        "address": address,
+        "key": GOOGLE_API_KEY
+    }
+    ### data from api
+    response = requests.get(apiUrl, params=params)
+    data = response.json()
+    # print(data)
+
+    ### If status is ok then put the data in the appropriate index
+    if data['status'] == 'OK':
+        location = data['results'][0]['geometry']['location']
+        df.at[idx, 'Geo'] = (location['lat'], location['lng'])
+        print(df.at[idx, "Geo"])
+    else:
+        print(f"Geocoding failed for: {address} | Status: {data['status']}")
+
+    time.sleep(.2)  # Wait for half a second before next iteration
+
+## Save df to new csv
+df.to_csv(outPath, index=False)
