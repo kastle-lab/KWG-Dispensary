@@ -1,4 +1,4 @@
-# This script will read the csv file containing the addresses of each dispensary, get the geolocation (lat/long), and append it to the dataset. 
+# This script will read the csv file containing the addresses of each dispensary, get the geolocation (lat/long), cross reference the geolocation data to determine the ZCTA of each dispensary, and append it to the dataset. 
 
 # Imports
 import os
@@ -27,7 +27,7 @@ def Find_File(fileName, desiredDirectory):
 ## Variables
 startDir = "C:\\Users\\micha\\Documents"     # Directory for search
 outDir = startDir + "\\GitHub\\Dispensary\\Deliverables\\Data\\"
-outFile = "Dispensary_Roster_Geo.csv"
+outFile = "Dispensary-Roster-Geo.csv"
 outPath = outDir + outFile # File Output for updated dataframe
 # print(outPath)
 fileName = "06-18-2024_Ohio_Medical_Marijuana_Dispensary_Roster_COOs.csv"
@@ -51,7 +51,7 @@ print(df)
 ## Create new df column for geoloc data
 df["Geo"] = None
 
-## get geloc data
+## Get geloc data
 ### Loop through each address and request geo location data from google api (json format)
 for idx, row in df.iterrows():
     address = row['Full Address']
@@ -72,7 +72,8 @@ for idx, row in df.iterrows():
     else:
         print(f"Geocoding failed for: {address} | Status: {data['status']}")
 
-    time.sleep(.2)  # Wait for half a second before next iteration
+    time.sleep(.2)  # Wait for 1/5 of a second before next iteration
 
 ## Save df to new csv
 df.to_csv(outPath, index=False)
+
