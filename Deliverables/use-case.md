@@ -15,6 +15,7 @@ The Ohio-KWG is designed to represent Ohio at various levels of abstraction and 
 
 ### Data
 
+- [Ohio SOS](https://www.ohiosos.gov/elections/election-results-and-data/2020/)
 - [CDC](https://www.cdc.gov/nchs/nvss/usaleep/usaleep.html)
 - [US Census Bureau](https://data.census.gov/table?g=040XX00US39$8600000&y=2023)
 
