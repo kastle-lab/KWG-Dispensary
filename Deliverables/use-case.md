@@ -13,6 +13,11 @@ The Ohio-KWG is designed to represent Ohio at various levels of abstraction and 
 - [Financial Industry Business Ontology (FIBO)](https://github.com/edmcouncil/fibo)
 - [Census Granularity](https://www.census.gov/newsroom/blogs/random-samplings/2014/07/understanding-geographic-relationships-counties-places-tracts-and-more.html)
 
+### Data
+
+- [CDC](https://www.cdc.gov/nchs/nvss/usaleep/usaleep.html)
+- [US Census Bureau](https://data.census.gov/table?g=040XX00US39$8600000&y=2023)
+
 # Contributors
 
 - Michael McCain
