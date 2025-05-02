@@ -21,3 +21,9 @@ This directory contains data about Ohio at the Zip Code Tabulated Areas (ZCTA) l
 - Demographics
 - Housing Costs
 - Health Insurance Coverage
+
+# Life Expectancy
+
+**NOTE**: Not all tract codes had life expectancy data.
+
+The address of each dispensary was input into the [FFIEC geo map](https://geomap.ffiec.gov/ffiecgeomap/) where the tract codes (StateCode-CountyCode-TractCode) were taken and matched with the ohio-life-exp-census-2023 data.
