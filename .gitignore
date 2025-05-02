@@ -1,3 +1,5 @@
 /Deliverables/Data/ohio-county-fips2.csv
 /.conda
-/Deliverables/Data/venv
+/.venv
+/.env
+/Deliverables/Data/Dispensary-Roster-Geo-ZCTA-copy.csv
