@@ -31,14 +31,15 @@ for col in newDf:
 
             if col == labelTotal:
                 # print(newDf[col])
-                dfRoster.loc[count, 'TotalPop'] = newDf.at[0, col]
+                dfRoster.at[count, 'TotalPop'] = newDf.at[0, col]
                 # time.sleep(2)
 
             if col == labelIns:
                 #  print(newDf[col])
-                 dfRoster.loc[count, 'PopInsured'] = newDf.at[0, col]
+                dfRoster.at[count, 'PopInsured'] = newDf.at[0, col]
                 #  time.sleep(2)
-    count = count + 1
+                count = count + 1
+
 
 print(dfRoster[['TotalPop', 'PopInsured']])
 
