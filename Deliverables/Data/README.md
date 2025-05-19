@@ -27,3 +27,7 @@ This directory contains data about Ohio at the Zip Code Tabulated Areas (ZCTA) l
 **NOTE**: Not all tract codes had life expectancy data.
 
 The address of each dispensary was input into the [FFIEC geo map](https://geomap.ffiec.gov/ffiecgeomap/) where the tract codes (StateCode-CountyCode-TractCode) were taken and matched with the ohio-life-exp-census-2023 data.
+
+# Voting Data
+
+The 2020 voting data was extracted from the geojson file for each precinct in Ohio from [TheUpshot](https://github.com/TheUpshot/presidential-precinct-map-2020) repository. The coordinates of each dispensary were matched with their appropriate precincts, and the data were exported to a CSV file.

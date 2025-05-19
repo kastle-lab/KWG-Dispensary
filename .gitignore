@@ -3,5 +3,6 @@
 /.venv
 /.env
 /Deliverables/Data/Dispensary-Roster-Geo-ZCTA-copy.csv
+Deliverables/Data/Dispensary-Roster-Geo-ZCTA-Votes copy.csv
 /Deliverables/Scripts/life-exp-match.py
 /Deliverables/Data/Geo
