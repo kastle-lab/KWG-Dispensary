@@ -14,13 +14,17 @@ import time
 env_path = find_dotenv() # Path to .env file (in root)
 load_dotenv(env_path) # Load env variables
 GOOGLE_API_KEY = os.environ['GEO_API_KEY'] # API_KEY
+
 query = "Pharmacies in Ohio"
 url = "https://places.googleapis.com/v1/places:searchText"
+
+columnHeaders = ['Business_Name', 'Address', 'Geo', 'Operational_Status','Places_ID']
+df = pd.DataFrame(columns=columnHeaders)
 
 params = {
   "key": GOOGLE_API_KEY,
   "textQuery": query,
-  "fields": "places.displayName,places.formattedAddress,places.businessStatus,places.location,places.id,nextPageToken",
+  "fields": "places.displayName,places.businessStatus,places.formattedAddress,places.businessStatus,places.location,places.id,nextPageToken",
   "includedType":"pharmacy"
 }
 
@@ -31,8 +35,15 @@ if r.status_code == 200:
   data = r.json()
 else:
   print(f"Failed to retrieve data {r.status_code}\n{r.text}")
-  
-nextPageToken = data["nextPageToken"]
 
-print(json.dumps(data, indent=2))
+places = data['places']
+for place in places:
+  placeId = place['id']
+  placeLocation = place['location']
+  placeLat = placeLocation['latitude']
+  placeLon = placeLocation['longitude']
+  displayName = place['displayName']
+  placeName = displayName['text']
+
+nextPageToken = data["nextPageToken"]
 
