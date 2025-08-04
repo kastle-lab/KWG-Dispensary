@@ -1,46 +1,44 @@
-# This script uses Pandas to grab data from the ZCTA data on health-insurance-coverge, add it to a dataframe consisting of the data from Dispensary-Roster-Geo-ZCTA, and save it to that file. 
 import pandas as pd
-import time 
 
-### MAIN ###
-# Variables
-zctaNum = ""
-rowPop = 'Civilian noninstitutionalized population'
+# File paths
+roster_path = "./Deliverables/Data/Pharmacy/ohio-pharmacies-with-zcta-split-vote.csv"
+insured_path = "./Deliverables/Data/ZCTA/ACSST5Y2023-health-insurance-coverage-zcta.csv"
+output_path = "./Deliverables/Data/Pharmacy/ohio-pharmacies-with-zcta-split-vote-ins.csv"
 
-# Read in csvs and create new columns
-outFile = "./Deliverables/Data/Dispensary-Roster-Geo-ZCTA-New.csv"
-dfRoster = pd.read_csv("./Deliverables/Data/Dispensary-Roster-Geo-ZCTA.csv")
-dfInsured = pd.read_csv("./Deliverables/Data/ZCTA/ACSST5Y2023-health-insurance-coverage-zcta.csv")
+# Load data
+dfRoster = pd.read_csv(roster_path)
+dfInsured = pd.read_csv(insured_path)
+
+# Prepare new columns
 dfRoster["TotalPop"] = None
 dfRoster["PopInsured"] = None
 
-# Get zcta code from row dfRoster
-rosterZctas = dfRoster['ZCTA5']
+# Build a lookup dictionary from dfInsured's single row
+insured_row = dfInsured.iloc[0]
+zcta_lookup = {}
 
-# Create new df with only data
-newDf = dfInsured.iloc[[0]]
+for col in insured_row.index:
+    if "!!Total!!Estimate" in col:
+        zcta = col.split("!!")[0].split()[1]  # Extract ZCTA5 code
+        zcta_lookup[zcta] = {
+            "Total": insured_row[col],
+            "Insured": None  # Will fill in next
+        }
 
-# Match with dfInsured col label (ZCTA5 43001!!Total!!Estimate,ZCTA5 43001!!Insured!!Estimate ) and join with dfRoster
-count = 0
+for col in insured_row.index:
+    if "!!Insured!!Estimate" in col:
+        zcta = col.split("!!")[0].split()[1]
+        if zcta in zcta_lookup:
+            zcta_lookup[zcta]["Insured"] = insured_row[col]
 
-for col in newDf:
-    for zcta in rosterZctas:
-            zctaNum = zcta
-            labelTotal = f'ZCTA5 {zctaNum}!!Total!!Estimate'
-            labelIns = f'ZCTA5 {zctaNum}!!Insured!!Estimate'
+# Fill in values to dfRoster
+for i, row in dfRoster.iterrows():
+    zcta = str(row["ZCTA5"]).zfill(5)  # Ensure 5-digit format
+    if zcta in zcta_lookup:
+        dfRoster.at[i, "TotalPop"] = zcta_lookup[zcta]["Total"]
+        dfRoster.at[i, "PopInsured"] = zcta_lookup[zcta]["Insured"]
 
-            if col == labelTotal:
-                # print(newDf[col])
-                dfRoster.at[count, 'TotalPop'] = newDf.at[0, col]
-                # time.sleep(2)
+# Save to CSV
+dfRoster.to_csv(output_path, index=False)
 
-            if col == labelIns:
-                #  print(newDf[col])
-                dfRoster.at[count, 'PopInsured'] = newDf.at[0, col]
-                #  time.sleep(2)
-                count = count + 1
-
-
-print(dfRoster[['TotalPop', 'PopInsured']])
-
-dfRoster.to_csv(outFile, index=False)
+print(dfRoster[['ZCTA5', 'TotalPop', 'PopInsured']])
