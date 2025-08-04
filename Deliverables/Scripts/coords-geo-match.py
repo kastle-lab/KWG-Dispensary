@@ -1,4 +1,4 @@
-# This script takes in the geojson data from https://github.com/TheUpshot/presidential-precinct-map-2020 and matches the coordinate sof the dispensaries with the precint and puts the voting results into Dispensary-Roster-Geo-ZCTA.csv. 
+# This script takes in the geojson data from https://github.com/TheUpshot/presidential-precinct-map-2020 and matches the coordinates of the dispensaries with the precint and puts the voting results into Dispensary-Roster-Geo-ZCTA.csv. 
 
 # Imports
 import geopandas as gpd
@@ -8,8 +8,8 @@ from shapely.geometry import Point
 
 # variables
 precintFile = "./Deliverables/Data/Geo/precincts-with-results.geojson" 
-rosterFile = "./Deliverables/Data/Dispensary-Roster-Geo-ZCTA.csv"
-outFile = "./Deliverables/Data/Dispensary-Roster-Geo-ZCTA-Votes.csv"
+rosterFile = "./Deliverables/Data/Pharmacy/ohio-pharmacies-with-zcta-split.csv"
+outFile = "./Deliverables/Data/Pharmacy/ohio-pharmacies-with-zcta-split-vote.csv"
 # Read files
 dfGeo = gpd.read_file(precintFile)
 dfRoster = pd.read_csv(rosterFile)
@@ -36,4 +36,4 @@ dispVotes = gpd.sjoin(dispGeo, dfGeo, how='left', predicate='within')
 # print(dispVotes.head())
 
 # Drop unnecessary columns for csv
-dispVotes.drop(['PresVote','geometry','longitude', 'latitude', 'index_right'],axis=1).to_csv(outFile, index=False)
+dispVotes.drop(['geometry','longitude', 'latitude', 'index_right'],axis=1).to_csv(outFile, index=False)

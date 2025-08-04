@@ -6,8 +6,9 @@ from pathlib import Path
 
 # MAIN
 ## Variables
-inFile = Path(__file__).parent.parent / 'Data' / 'Dispensary-Roster-Geo.csv'
-outFile = Path(__file__).parent.parent / 'Data' / 'Dispensary-Roster-Geo-ZCTA.csv' 
+inFile = Path(__file__).parent.parent / 'Data' / 'Pharmacy' /'ohio-pharmacies-clean.csv'
+outFile = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / "ohio-pharmacies-with-zcta.csv"
+
 url = "https://geocoding.geo.census.gov/geocoder/geographies/coordinates" # U.S. Census API Url for coordinates
 
 ## Read in csv an create new col for ZCTA
