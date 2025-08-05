@@ -1,9 +1,10 @@
 import pandas as pd
+from pathlib import Path
 
 # File paths
-roster_path = "./Deliverables/Data/Pharmacy/ohio-pharmacies-with-zcta-split-vote.csv"
-insured_path = "./Deliverables/Data/ZCTA/ACSST5Y2023-health-insurance-coverage-zcta.csv"
-output_path = "./Deliverables/Data/Pharmacy/ohio-pharmacies-with-zcta-split-vote-ins.csv"
+roster_path = Path(__file__).parent.parent / 'Data' /'Primary-Dataset-2(pharmacy).csv' 
+insured_path = Path(__file__).parent.parent / 'Data' / 'ZCTA' / 'ACSST5Y2023-health-insurance-coverage-zcta.csv'
+output_path = Path(__file__).parent.parent / 'Data' /'Primary-Dataset-2(pharmacy)-NEW.csv' 
 
 # Load data
 dfRoster = pd.read_csv(roster_path)
