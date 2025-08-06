@@ -102,9 +102,9 @@ def merge_income_data(file1_path, file2_path, output_path):
 # Example usage
 if __name__ == "__main__":
     # Replace these paths with your actual file paths
-    file1_path = Path(__file__).parent.parent / 'Data' / 'Pharmacy' /'ohio-pharmacies-with-zcta-split-vote-ins.csv' 
+    file1_path = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official'/'Ohio-Retail-Pharmacies-with-zcta-vote-ins.csv'
     file2_path = Path(__file__).parent.parent / 'Data' / 'ZCTA' /'ACSST5Y2023-household-income-zcta.csv' 
-    output_path = Path(__file__).parent.parent / 'Data' / 'Pharmacy' /'ohio-pharmacies-with-zcta-split-vote-ins-hh.csv' 
+    output_path = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official'/'Ohio-Retail-Pharmacies-with-zcta-vote-ins-hh.csv' 
     
     try:
         merge_income_data(file1_path, file2_path, output_path)

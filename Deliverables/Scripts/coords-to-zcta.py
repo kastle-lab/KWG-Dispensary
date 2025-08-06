@@ -6,8 +6,8 @@ from pathlib import Path
 
 # MAIN
 ## Variables
-inFile = Path(__file__).parent.parent / 'Data' / 'Pharmacy' /'ohio-pharmacies-clean.csv'
-outFile = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / "ohio-pharmacies-with-zcta.csv"
+inFile = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official' / 'Ohio-Retail-Pharmacies-Geo.csv'
+outFile = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official' / "Ohio-Retail-Pharmacies-with-zcta.csv"
 
 url = "https://geocoding.geo.census.gov/geocoder/geographies/coordinates" # U.S. Census API Url for coordinates
 
@@ -18,7 +18,12 @@ df["ZCTA5"] = None
 ## Iterate through each row, create varibles from geocoordinates, request ZCTA data from U.S. Census API, and append to dataframe
 for idx, row in df.iterrows():
   ### Split coordinates into variables
-  coord = df.iloc[idx]["Geo"].strip('()').split(',')
+  value = df.iloc[idx]["Geo"]
+  if isinstance(value, str):
+      coord = value.strip('()').split(',')
+  else:
+      print(f'Coordinate not a string: {idx}')
+      coord = [None, None]  # Or handle it however makes sense for your case
   lat = float(coord[0])
   lon = float(coord[1])
 

@@ -6,6 +6,7 @@ from dotenv import find_dotenv, load_dotenv
 import pandas as pd
 import requests
 import time
+from pathlib import Path
 
 # Functions 
 ## This function will attempt to find a file within a specified directory and subdirectories. Then it will return the absolute path of that file.
@@ -25,13 +26,14 @@ def Find_File(fileName, desiredDirectory):
 
 # MAIN
 ## Variables
-startDir = "C:\\Users\\micha\\Documents"     # Directory for search
-outDir = startDir + "\\GitHub\\Dispensary\\Deliverables\\Data\\"
-outFile = "Dispensary-Roster-Geo.csv"
-outPath = outDir + outFile # File Output for updated dataframe
+# startDir = "C:\\Users\\micha\\Documents"     # Directory for search
+# outDir = startDir + "\\GitHub\\Dispensary\\Deliverables\\Data\\"
+filePath = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official' / 'Ohio-Retail-Pharmacies.csv'
+outFile = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official' / 'Ohio-Retail-Pharmacies-Geo.csv'
+# outPath = outDir + outFile # File Output for updated dataframe
 # print(outPath)
-fileName = "06-18-2024_Ohio_Medical_Marijuana_Dispensary_Roster_COOs.csv"
-filePath = Find_File(fileName, startDir) # Joined file path
+# fileName = "06-18-2024_Ohio_Medical_Marijuana_Dispensary_Roster_COOs.csv"
+# filePath = Find_File(fileName, startDir) # Joined file path
 # print(f"File path: {filePath}") 
 
 env_path = find_dotenv() # Path to .env file (in root)
@@ -45,7 +47,7 @@ apiUrl = "https://maps.googleapis.com/maps/api/geocode/json" # Gmaps Geocoding A
 df =  pd.read_csv(filePath)
 
 ## Concatonate separate address columns and make a full address col (public address street, public address city, State, public zip)
-df["Full Address"] = df['Public Address Street'] + ' ' + df['Public Address City'] + ', ' + state + ' ' + df['Public Zip']
+df["Full Address"] = df['LocationStreetAddress'] + ', ' + df['LocationCity'] + ', ' + df['LocationState'] + ' ' + df['LocationZip']
 print(df)
 
 ## Create new df column for geoloc data
@@ -75,5 +77,5 @@ for idx, row in df.iterrows():
     time.sleep(.2)  # Wait for 1/5 of a second before next iteration
 
 ## Save df to new csv
-df.to_csv(outPath, index=False)
+df.to_csv(outFile, index=False)
 

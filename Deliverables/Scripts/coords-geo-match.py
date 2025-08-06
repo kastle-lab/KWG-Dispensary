@@ -5,11 +5,13 @@ import geopandas as gpd
 import pandas as pd
 import shapely
 from shapely.geometry import Point
+from pathlib import Path
 
 # variables
-precintFile = "./Deliverables/Data/Geo/precincts-with-results.geojson" 
-rosterFile = "./Deliverables/Data/Pharmacy/ohio-pharmacies-with-zcta-split.csv"
-outFile = "./Deliverables/Data/Pharmacy/ohio-pharmacies-with-zcta-split-vote.csv"
+precintFile = Path(__file__).parent.parent / 'Data' / 'Geo'/ 'precincts-with-results.geojson' 
+rosterFile = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official' / 'Ohio-Retail-Pharmacies-with-zcta.csv'
+outFile = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official' / 'Ohio-Retail-Pharmacies-with-zcta-vote.csv'
+
 # Read files
 dfGeo = gpd.read_file(precintFile)
 dfRoster = pd.read_csv(rosterFile)

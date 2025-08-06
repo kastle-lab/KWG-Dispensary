@@ -125,7 +125,7 @@ def add_tract_codes_to_csv(input_file: str, output_file: str, delay: float = 0.1
         geo_value = row['Geo']
         
         # Parse coordinates
-        lat, lon = parse_coordinates(geo_value)
+        lat, lon = parse_coordinates(geo_value.strip('()'))
         
         if lat is None or lon is None:
             print(f"Row {idx + 1}: Invalid coordinates format: '{geo_value}'")
@@ -198,8 +198,8 @@ if __name__ == "__main__":
     print("\n" + "="*50 + "\n")
     
     # Process CSV file
-    input_file = Path(__file__).parent.parent / 'Data' / 'Pharmacy' /'ohio-pharmacies-with-zcta-split-vote-ins-hh.csv' 
-    output_file = Path(__file__).parent.parent / 'Data' / 'Pharmacy' /'ohio-pharmacies-with-zcta-split-vote-ins-hh-tract.csv' 
+    input_file = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official'/'Ohio-Retail-Pharmacies-with-zcta-vote-ins-hh.csv' 
+    output_file = Path(__file__).parent.parent / 'Data' / 'Pharmacy' / 'Official'/'Ohio-Retail-Pharmacies-with-zcta-vote-ins-hh-tract.csv' 
     
     # Add a small delay between requests to be respectful to the FCC API
     api_delay = 0.1  # 100ms delay between requests
